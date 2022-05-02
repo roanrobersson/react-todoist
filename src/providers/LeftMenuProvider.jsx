@@ -6,7 +6,7 @@ const LeftMenuProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(
     localStorage.getItem(STORAGE_KEY) === null
       ? true
-      : localStorage.getItem(STORAGE_KEY) === 'true'
+      : localStorage.getItem(STORAGE_KEY) === "true"
   );
 
   useEffect(() => {

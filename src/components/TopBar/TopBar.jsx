@@ -91,7 +91,7 @@ const TopBar = () => {
     >
       <MenuItem>
         <IconButton size="large" color="inherit">
-          <AddIcon/>
+          <AddIcon />
         </IconButton>
         <p>Adicionar tarefa</p>
       </MenuItem>

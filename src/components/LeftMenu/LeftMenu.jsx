@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { StyledDrawer, Main } from "./styles";
 import {
   Inbox as InboxIcon,
   Event as EventIcon,
@@ -9,7 +10,6 @@ import {
   Circle as CircleIcon,
   CalendarMonth as CalendarMonthIcon,
 } from "@mui/icons-material";
-import { StyledDrawer, Main } from "./styles";
 import {
   Divider,
   List,
