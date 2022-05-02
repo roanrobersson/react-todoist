@@ -1,4 +1,5 @@
 import { AUTH_URL, CLIENT_ID, AUTH_SCOPE, AUTH_STATE } from "@/configs/env.js";
+import colors from "@/configs/objectColors.js";
 
 const REDIRECT_TO_AUTH_DELAY = 2000;
 
@@ -24,3 +25,7 @@ export const getParamFromActualURL = (paramName) => {
 export const clearAllParamsFromActualURL = () => {
   window.history.replaceState(null, null, window.location.pathname);
 };
+
+export const normalizeColor = (colorNumber) =>{
+  return colors[colorNumber];
+}

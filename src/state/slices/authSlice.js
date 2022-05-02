@@ -3,7 +3,7 @@ import { call, put } from "redux-saga/effects";
 import { tokenRequest } from "@/api/request.js";
 import { clearAllParamsFromActualURL } from "@/lib/util.js";
 
-export function* requestToken(action) {
+export function* onRequestToken(action) {
   try {
     const response = yield call(tokenRequest, [action.payload]);
     const token = response.data.access_token;

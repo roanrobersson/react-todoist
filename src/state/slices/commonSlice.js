@@ -1,17 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { put, take, all } from "redux-saga/effects";
-import { FETCH_PROJECTS, FETCH_PROJECTS_SUCCESS } from "./projectsSlice";
+import {
+  FETCH_PROJECTS,
+  FETCH_PROJECTS_SUCCESS,
+  TOGGLE_SELECTED_PROJECT,
+} from "./projectsSlice";
+import { FETCH_TASKS, FETCH_TASKS_SUCCESS } from "./tasksSlice";
 
 export function* onAuthorized(action) {
   yield put(FETCH_INITIAL_DATA());
 }
 
-export function* requestInitialData(action) {
-  yield put(FETCH_PROJECTS());
+export function* onRequestInitialData(action) {
   yield all([
-    yield take(FETCH_PROJECTS_SUCCESS.type),
-  ])
+    yield put(FETCH_PROJECTS()),
+    yield put(FETCH_TASKS()),
+  ]);
   yield put(FETCH_INITIAL_DATA_SUCCESS());
+  //yield put(TOGGLE_SELECTED_PROJECT());
 }
 
 const initialState = {
@@ -31,5 +37,6 @@ export const commonSlice = createSlice({
   },
 });
 
-export const { FETCH_INITIAL_DATA, FETCH_INITIAL_DATA_SUCCESS } = commonSlice.actions;
+export const { FETCH_INITIAL_DATA, FETCH_INITIAL_DATA_SUCCESS } =
+  commonSlice.actions;
 export default commonSlice.reducer;

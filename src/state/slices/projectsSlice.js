@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { call, put } from "redux-saga/effects";
 import getApi from "@/api/todoistApi.js";
+import { FETCH_TASKS } from "./tasksSlice.js";
 
-export function* requestProjects() {
+export function* onRequestProjects() {
   try {
     const response = yield call(() => getApi().getProjects());
     yield put(FETCH_PROJECTS_SUCCESS(response));
@@ -15,10 +16,15 @@ export function* onReceiveProjects(action) {
   yield put(SET_PROJECTS(action.payload));
 }
 
+export function* onToggleSelectedProject(action) {
+  yield put(FETCH_TASKS());
+}
+
 const initialState = {
   data: [],
   loading: false,
   error: false,
+  selectedProject: null,
 };
 
 export const projectsSlice = createSlice({
@@ -39,6 +45,9 @@ export const projectsSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    TOGGLE_SELECTED_PROJECT: (state, action) => {
+      state.selectedProject = action.payload;
+    },
   },
 });
 
@@ -47,5 +56,6 @@ export const {
   FETCH_PROJECTS_SUCCESS,
   SET_PROJECTS,
   FETCH_PROJECTS_ERROR,
+  TOGGLE_SELECTED_PROJECT,
 } = projectsSlice.actions;
 export default projectsSlice.reducer;
