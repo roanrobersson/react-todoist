@@ -1,8 +1,10 @@
 import { all, takeLatest } from "redux-saga/effects";
 import {
   FETCH_INITIAL_DATA,
+  FETCH_INITIAL_DATA_SUCCESS,
   onAuthorized as commonSliceOnAuthorized,
   onRequestInitialData,
+  onRequestInitialDataSuccess,
 } from "./slices/commonSlice";
 import {
   FETCH_TOKEN,
@@ -39,5 +41,6 @@ export default function* rootSaga() {
     takeLatest(TOGGLE_SELECTED_PROJECT.type, onToggleSelectedProject),
     takeLatest(FETCH_TASKS.type, onRequestTasks),
     takeLatest(FETCH_TASKS_SUCCESS.type, onReceiveTasks),
+    takeLatest(FETCH_INITIAL_DATA_SUCCESS.type, onRequestInitialDataSuccess),
   ]);
 }

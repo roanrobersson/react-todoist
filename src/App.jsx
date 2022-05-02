@@ -69,7 +69,7 @@ const App = () => {
         showRetryButton={authState.error}
         onRetryClick={handleRetryClick}
       />
-      <LoadingModal isOpen={commonState.loadingInitialData}/>
+      <LoadingModal isOpen={commonState.initialData.loading}/>
     </BrowserRouter>
   );
 };

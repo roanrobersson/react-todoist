@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { TOGGLE_SELECTED_PROJECT } from "@/state/slices/projectsSlice.js";
 import TopBar from "@/components/TopBar";
@@ -15,15 +16,25 @@ const Home = () => {
     (state) => state.projects.selectedProject
   );
   const dispatch = useDispatch();
-  const { projectId } = useParams();
+  const { projectId: projectIdParam } = useParams();
 
   const handleProjectItemClick = (project) => {
     navigate("/app/projects/" + project.id); // arrumar isso aqui!!!!!!!!!!!!!
     dispatch(TOGGLE_SELECTED_PROJECT(project));
   };
 
+  const getProjectById = (id) => {
+    return projects.find((project) => project.id == id);
+  };
+
+  useEffect(() => {
+    if (projectIdParam == undefined) return;
+    const project = getProjectById(projectIdParam);
+    if (projectIdParam && project) TOGGLE_SELECTED_PROJECT(project);
+  }, [projectIdParam]);
+
   const tasksOfSelectedProject = () => {
-    return tasks.filter((task) => task.projectId == projectId);
+    return tasks.filter((task) => task.projectId == projectIdParam);
   };
 
   return (

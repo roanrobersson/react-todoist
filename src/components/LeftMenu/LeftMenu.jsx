@@ -12,6 +12,8 @@ import {
   ExpandMore as ExpandMoreIcon,
   Circle as CircleIcon,
   CalendarMonth as CalendarMonthIcon,
+  Add as AddIcon,
+  MoreHoriz as MoreHorizIcon,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -20,6 +22,7 @@ import {
   ListItemButton,
   Collapse,
   Drawer,
+  IconButton,
 } from "@mui/material";
 
 export const StyledDrawer = styled(Drawer)(({ theme }) => ({
@@ -32,10 +35,17 @@ export const StyledDrawer = styled(Drawer)(({ theme }) => ({
   },
 }));
 
+export const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  borderRadius: 5,
+  paddingTop: 1,
+  paddingBottom: 1,
+}));
+
 const LeftMenu = ({ projects, onProjectItemClick }) => {
   const { projectId: projectIdParam } = useParams();
   //const [selectedIndex, setSelectedIndex] = useState(1);
   const [projectListIsOpen, setProjectListIsOpen] = useState(false);
+  const [isMouseOverLeftMenu, setIsMouseOverLeftMenu] = useState(false);
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
   const inboxObject = projects.find((project) => project.name == "Inbox");
 
@@ -62,70 +72,97 @@ const LeftMenu = ({ projects, onProjectItemClick }) => {
   }, [projects]);
 
   return (
-    <StyledDrawer variant="persistent" anchor="left" open={isOpen}>
-      <Divider />
-
-      <List component="nav">
-        <ListItemButton
+    <StyledDrawer
+      variant="persistent"
+      anchor="left"
+      open={isOpen}
+      onMouseEnter={() => setIsMouseOverLeftMenu(true)}
+      onMouseLeave={() => setIsMouseOverLeftMenu(false)}
+    >
+      <List component="nav" sx={{ pl: 5, pt: 5 }}>
+        <StyledListItemButton
           selected={projectIdParam == inboxObject?.id}
           onClick={(event) => handleProjectItemClick(event, inboxObject)}
         >
           <ListItemIcon>
-            <InboxIcon />
+            <InboxIcon htmlColor="#246fe0" />
           </ListItemIcon>
           <ListItemText primary="Entrada" />
-        </ListItemButton>
+        </StyledListItemButton>
 
-        <ListItemButton
+        <StyledListItemButton
           selected={projectIdParam == 1}
           onClick={(event) => handleListItemClick(event, 1)}
         >
           <ListItemIcon>
-            <EventIcon />
+            <EventIcon htmlColor="#058527" />
           </ListItemIcon>
           <ListItemText primary="Hoje" />
-        </ListItemButton>
+        </StyledListItemButton>
 
-        <ListItemButton
+        <StyledListItemButton
           selected={projectIdParam == 2}
           onClick={(event) => handleListItemClick(event, 2)}
         >
           <ListItemIcon>
-            <CalendarMonthIcon />
+            <CalendarMonthIcon htmlColor="#692fc2" />
           </ListItemIcon>
           <ListItemText primary="Em breve" />
-        </ListItemButton>
+        </StyledListItemButton>
 
-        <Divider />
-
-        <ListItemButton onClick={handleProjectListClick}>
+        <StyledListItemButton
+          onClick={handleProjectListClick}
+          sx={{ mt: 3 }}
+          style={{ backgroundColor: "transparent" }}
+        >
+          {projectListIsOpen ? (
+            <ExpandLessIcon sx={{ mr: 4 }} />
+          ) : (
+            <ExpandMoreIcon sx={{ mr: 4 }} />
+          )}
           <ListItemText primary="Projetos" />
-          {projectListIsOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </ListItemButton>
-      </List>
 
-      <Collapse in={projectListIsOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {projects
-            .filter((project) => project.name != "Inbox")
-            .map((project) => (
-              <ListItemButton
-                sx={{ pl: 4 }}
-                selected={projectIdParam == project.id}
-                onClick={(event) => handleProjectItemClick(event, project)}
-                key={project.id}
-              >
-                <ListItemIcon>
-                  <CircleIcon
-                    fontSize="small"
-                    htmlColor={normalizeColor(project.color)}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={project.name} />
-              </ListItemButton>
-            ))}
-        </List>
-      </Collapse>
+          <IconButton
+            color="inherit"
+            onClick={(event) => event.stopPropagation()}
+            sx={{ ...(!isMouseOverLeftMenu && { visibility: "hidden" }) }}
+          >
+            <AddIcon fontSize="small" />
+          </IconButton>
+        </StyledListItemButton>
+
+        <Collapse in={projectListIsOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {projects
+              .filter((project) => project.name != "Inbox")
+              .map((project) => (
+                <StyledListItemButton
+                  sx={{ pl: 4 }}
+                  selected={projectIdParam == project.id}
+                  onClick={(event) => handleProjectItemClick(event, project)}
+                  key={project.id}
+                >
+                  <ListItemIcon>
+                    <CircleIcon
+                      fontSize="small"
+                      htmlColor={normalizeColor(project.color)}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={project.name} />
+                  <IconButton
+                    color="inherit"
+                    onClick={(event) => event.stopPropagation()}
+                    sx={{
+                      ...(!isMouseOverLeftMenu && { visibility: "hidden" }),
+                    }}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                </StyledListItemButton>
+              ))}
+          </List>
+        </Collapse>
+      </List>
     </StyledDrawer>
   );
 };

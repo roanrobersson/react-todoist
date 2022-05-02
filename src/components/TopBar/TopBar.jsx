@@ -97,7 +97,7 @@ const TopBar = () => {
       </MenuItem>
       <MenuItem>
         <IconButton size="large" color="inherit">
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={0} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -148,7 +148,7 @@ const TopBar = () => {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Pesquisar..."
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
@@ -164,7 +164,7 @@ const TopBar = () => {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

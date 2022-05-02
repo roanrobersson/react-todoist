@@ -32,12 +32,20 @@ export const tasksSlice = createSlice({
     FETCH_TASKS_SUCCESS: (state) => {
       state.loading = true;
     },
+    FETCH_TASKS_ERROR: (state) => {
+      state.loading = false;
+      state.error = true;
+    },
     SET_TASKS: (state, action) => {
       state.data = action.payload;
     },
   },
 });
 
-export const { FETCH_TASKS, FETCH_TASKS_SUCCESS, SET_TASKS } =
-  tasksSlice.actions;
+export const {
+  FETCH_TASKS,
+  FETCH_TASKS_SUCCESS,
+  SET_TASKS,
+  FETCH_TASKS_ERROR,
+} = tasksSlice.actions;
 export default tasksSlice.reducer;

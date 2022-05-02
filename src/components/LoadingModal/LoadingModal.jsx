@@ -1,6 +1,6 @@
 import { Modal, Box } from "@mui/material";
 import Loading from "../Loading";
-import logoImg from "@/assets/images/logo.png";
+import logoImg from "@/assets/images/logo_75x75.png";
 
 const style = {
   position: "absolute",
@@ -8,7 +8,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
-  height: 400,
+  height: 300,
   bgcolor: "background.paper",
   boxShadow: 24,
   pt: 9,
@@ -23,7 +23,7 @@ const LoadingModal = ({ isOpen }) => {
     >
       <Box sx={style}>
         <Box sx={{ display: "flex", justifyContent: "center", pb: 4 }}>
-          <img src={logoImg} />
+          <img src={logoImg}/>
         </Box>
         <Loading noPadding="true" />
       </Box>

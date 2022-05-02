@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { call, put } from "redux-saga/effects";
 import getApi from "@/api/todoistApi.js";
-import { FETCH_TASKS } from "./tasksSlice.js";
 
 export function* onRequestProjects() {
   try {
@@ -17,7 +16,7 @@ export function* onReceiveProjects(action) {
 }
 
 export function* onToggleSelectedProject(action) {
-  yield put(FETCH_TASKS());
+
 }
 
 const initialState = {
