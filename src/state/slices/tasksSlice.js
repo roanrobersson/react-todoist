@@ -11,6 +11,16 @@ export function* onRequestTasks() {
   }
 }
 
+export function* onCloseTasks(action) {
+  const taskId = action.payload;
+  try {
+    const response = yield call(() => getApi().closeTask(taskId));
+    yield put(CLOSE_TASK_SUCCESS(response));
+  } catch (error) {
+    yield put(CLOSE_TASK_ERROR());
+  }
+}
+
 const initialState = {
   data: [],
   loading: false,
@@ -33,9 +43,27 @@ export const tasksSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    CLOSE_TASK: (state) => {
+      state.loading = true;
+      state.error = false;
+    },
+    CLOSE_TASK_SUCCESS: (state, action) => {
+      state.loading = false;
+      //state.data = action.payload;
+    },
+    CLOSE_TASK_ERROR: (state) => {
+      state.loading = false;
+      state.error = true;
+    },
   },
 });
 
-export const { FETCH_TASKS, FETCH_TASKS_SUCCESS, FETCH_TASKS_ERROR } =
-  tasksSlice.actions;
+export const {
+  FETCH_TASKS,
+  FETCH_TASKS_SUCCESS,
+  FETCH_TASKS_ERROR,
+  CLOSE_TASK,
+  CLOSE_TASK_SUCCESS,
+  CLOSE_TASK_ERROR,
+} = tasksSlice.actions;
 export default tasksSlice.reducer;

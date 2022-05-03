@@ -18,7 +18,6 @@ const Home = () => {
   const navigate = useNavigate();
   const projects = useSelector((state) => state.projects.data);
   const inboxProjectId = useSelector((state) => state.projects.inboxProjectId);
-  const tasks = useSelector((state) => state.tasks.data);
   const dispatch = useDispatch();
   const { projectId: projectIdParam } = useParams();
   const [projectModalType, setProjectModalType] = useState(null);
@@ -60,24 +59,12 @@ const Home = () => {
     dispatch(DELETE_PROJECT(projectId));
   };
 
-  const getProjectById = (id) => {
-    return projects.find((project) => project.id == id);
-  };
-
-  const selectedProject = () => {
-    return projects.find((project) => project.id == selectedProjectId);
-  };
-
-  const tasksOfSelectedProject = () => {
-    return tasks.filter((task) => task.projectId == selectedProjectId);
-  };
-
   useEffect(() => {
     if (inboxProjectId != null && projectIdParam == undefined) {
       dispatch(TOGGLE_SELECTED_PROJECT(inboxProjectId));
       return;
     }
-    if (projectIdParam != undefined && getProjectById(projectIdParam) != null) {
+    if (projectIdParam != undefined && findProjectById(projectIdParam) != null) {
       dispatch(TOGGLE_SELECTED_PROJECT(projectIdParam));
     }
   }, [projectIdParam, inboxProjectId]);
@@ -100,10 +87,7 @@ const Home = () => {
             onDeleteProjectClick={handleDeleteProjectClick}
           />
 
-          <ProjectViewer
-            project={selectedProject()}
-            tasks={tasksOfSelectedProject()}
-          />
+          <ProjectViewer />
         </Box>
       </LeftMenuProvider>
       {projectModalType && (

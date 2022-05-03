@@ -1,53 +1,131 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
+import { useSelector, useDispatch } from "react-redux";
 import { Main } from "./styles";
-import { Typography, Divider, Box, Checkbox, Container } from "@mui/material";
+import {
+  MoreHoriz as MoreHorizIcon,
+  BorderColorOutlined as BorderColorIcon,
+} from "@mui/icons-material";
+import {
+  Typography,
+  Divider,
+  Box,
+  Checkbox,
+  Container,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 
-const ProjectViewer = ({ project, tasks }) => {
+const ProjectViewer = () => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
+  const [checked, setChecked] = useState([0]);
+  const [hoveredTaskId, setHoveredTaskId] = useState(null);
+  const dispatch = useDispatch();
+  const selectedProjectId = useSelector(
+    (state) => state.projects.selectedProjectId
+  );
+  const selectedProject = useSelector((state) => state.projects.data).find(
+    (project) => project.id == selectedProjectId
+  );
+  const tasks = useSelector((state) => state.tasks.data).filter(
+    (task) => task.projectId == selectedProjectId
+  );
 
   const normalizeProjectName = (projectName) => {
     return projectName == "Inbox" ? "Entrada" : projectName;
   };
 
-  if (!project) return null;
+  const handleTaskCheckToggle = (taskId) => {
+    const currentIndex = checked.indexOf(taskId);
+    const newChecked = [...checked];
+    if (currentIndex === -1) {
+      newChecked.push(taskId);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+    setChecked(newChecked);
+  };
+
+  const handleTaskClick = (taskId) => {};
+
+  const handleTaskEditClick = (taskId) => {};
+
+  const handleTaskOptionsClick = (taskId) => {};
+
+  if (!selectedProject) return null;
 
   return (
     <Container>
       <Main open={isOpen} sx={{ pt: 4, px: 7 }}>
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {normalizeProjectName(project?.name)}
+          {normalizeProjectName(selectedProject?.name)}
         </Typography>
 
-        {tasks.map((task) => (
-          <Box key={task.id}>
-            <Box sx={{ display: "flex" }}>
-              <Box>
-                <Checkbox />
-              </Box>
-              <Box sx={{ py: 1 }}>
-                <Typography variant="body2" sx={{ mb: 0 }}>
-                  Título: {task.content}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "gray",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    maxWidth: "500px",
-                  }}
+        <List sx={{ width: "100%" }}>
+          {tasks
+            .sort((a, b) => a.order > b.order)
+            .map((task) => (
+              <Box
+                key={task.id}
+                onMouseEnter={() => setHoveredTaskId(task.id)}
+                onMouseLeave={() => setHoveredTaskId(null)}
+              >
+                <ListItem
+                  disablePadding
+                  secondaryAction={
+                    <Box
+                      sx={{
+                        color: "gray",
+                        ...(hoveredTaskId != task.id && {
+                          visibility: "hidden",
+                        }),
+                      }}
+                    >
+                      <IconButton
+                        edge="end"
+                        sx={{ mr: 1 }}
+                        onClick={handleTaskEditClick}
+                      >
+                        <BorderColorIcon />
+                      </IconButton>
+                      <IconButton edge="end" onClick={handleTaskOptionsClick}>
+                        <MoreHorizIcon />
+                      </IconButton>
+                    </Box>
+                  }
                 >
-                  Descrição: {task.description}
-                </Typography>
+                  <Checkbox
+                    edge="start"
+                    checked={checked.indexOf(task.id) !== -1}
+                    onClick={() => handleTaskCheckToggle(task.id)}
+                    disableRipple
+                  />
+                  <ListItemButton
+                    dense
+                    onClick={handleTaskClick}
+                    sx={{
+                      "&.MuiListItemButton-root:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    <ListItemText
+                      primary={task.content}
+                      secondary={task.description}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <Divider />
               </Box>
-            </Box>
-            <Divider />
-          </Box>
-        ))}
+            ))}
+        </List>
 
-        {!project && <Typography>Nenhum projeto selecionado</Typography>}
+        {!selectedProject && (
+          <Typography>Nenhum projeto selecionado</Typography>
+        )}
       </Main>
     </Container>
   );

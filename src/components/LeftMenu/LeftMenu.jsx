@@ -223,10 +223,11 @@ const LeftMenu = ({
         anchorEl={projectMenuAnchorEl}
         open={isProjectMenuOpen}
         onClose={handleProjectMenuClose}
+        sx={{ color: "gray" }}
       >
         <MenuItem onClick={() => handleProjectEditClick(projectMenuProjectId)}>
           <ListItemIcon>
-            <BorderColorIcon fontSize="small" htmlColor="gray" />
+            <BorderColorIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Editar projeto</ListItemText>
         </MenuItem>
@@ -235,7 +236,7 @@ const LeftMenu = ({
           onClick={() => handleProjectDeleteClick(projectMenuProjectId)}
         >
           <ListItemIcon>
-            <DeleteIcon fontSize="small" htmlColor="gray" />
+            <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Excluir projeto</ListItemText>
         </MenuItem>

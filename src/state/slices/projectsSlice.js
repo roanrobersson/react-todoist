@@ -12,8 +12,9 @@ export function* onRequestProjects() {
 }
 
 export function* onAddProject(action) {
+  const project = action.payload;
   try {
-    const response = yield call(() => getApi().addProject(action.payload));
+    const response = yield call(() => getApi().addProject(project));
     yield put(ADD_PROJECT_SUCCESS(response));
   } catch (error) {
     yield put(ADD_PROJECT_ERROR());
@@ -21,18 +22,20 @@ export function* onAddProject(action) {
 }
 
 export function* onUpdateProject(action) {
+  const project = action.payload;
   try {
-    yield call(() => getApi().updateProject(action.payload.id, action.payload));
-    yield put(UPDATE_PROJECT_SUCCESS(action.payload));
+    yield call(() => getApi().updateProject(project.id, project));
+    yield put(UPDATE_PROJECT_SUCCESS(project));
   } catch (error) {
     yield put(UPDATE_PROJECT_ERROR());
   }
 }
 
 export function* onDeleteProject(action) {
+  const projectId = action.payload;
   try {
-    yield call(() => getApi().deleteProject(action.payload));
-    yield put(DELETE_PROJECT_SUCCESS(action.payload));
+    yield call(() => getApi().deleteProject(projectId));
+    yield put(DELETE_PROJECT_SUCCESS(projectId));
   } catch (error) {
     yield put(DELETE_PROJECT_ERROR());
   }

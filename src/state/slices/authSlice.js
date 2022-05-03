@@ -4,8 +4,9 @@ import { tokenRequest } from "@/api/request.js";
 import { clearAllParamsFromActualURL } from "@/lib/util.js";
 
 export function* onRequestToken(action) {
+  const code = action.payload;
   try {
-    const response = yield call(tokenRequest, [action.payload]);
+    const response = yield call(tokenRequest, [code]);
     const token = response.data.access_token;
     yield localStorage.setItem("token", token);
     yield put(FETCH_TOKEN_SUCCESS(token));
@@ -16,13 +17,13 @@ export function* onRequestToken(action) {
 }
 
 export function* onReceiveToken(action) {
-  yield put(AUTHORIZED(action.payload));
+  const token = action.payload;
+  yield put(AUTHORIZED(token));
 }
 
 export function* onAuthorized(action) {
-  yield window.dispatchEvent(
-    new CustomEvent("new_token", { detail: action.payload })
-  );
+  const token = action.payload;
+  yield window.dispatchEvent(new CustomEvent("new_token", { detail: token }));
 }
 
 const initialState = {
