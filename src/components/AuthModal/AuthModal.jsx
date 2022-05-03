@@ -1,5 +1,5 @@
 import { Modal, Box, Typography, Button } from "@mui/material";
-import Loading from "../Loading";
+import CircularLoading from "../CircularLoading";
 
 const style = {
   position: "absolute",
@@ -35,7 +35,7 @@ const AuthModal = ({ isOpen, title, showRetryButton, onRetryClick }) => {
             </Button>
           </Box>
         ) : (
-          <Loading />
+          <CircularLoading />
         )}
       </Box>
     </Modal>

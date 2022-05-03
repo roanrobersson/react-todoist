@@ -16,11 +16,17 @@ import {
 } from "./slices/authSlice";
 import {
   FETCH_PROJECTS,
-  FETCH_PROJECTS_SUCCESS,
   TOGGLE_SELECTED_PROJECT,
+  ADD_PROJECT,
+  UPDATE_PROJECT,
+  DELETE_PROJECT,
+  DELETE_PROJECT_SUCCESS,
   onRequestProjects,
-  onReceiveProjects,
   onToggleSelectedProject,
+  onAddProject,
+  onUpdateProject,
+  onDeleteProject,
+  onDeleteProjectSuccess,
 } from "./slices/projectsSlice";
 import {
   FETCH_TASKS,
@@ -36,11 +42,14 @@ export default function* rootSaga() {
     takeLatest(AUTHORIZED.type, authSliceOnAuthorized),
     takeLatest(FETCH_INITIAL_DATA.type, onRequestInitialData),
     takeLatest(FETCH_PROJECTS.type, onRequestProjects),
-    takeLatest(FETCH_PROJECTS_SUCCESS.type, onReceiveProjects),
     takeLatest(AUTHORIZED.type, commonSliceOnAuthorized),
     takeLatest(TOGGLE_SELECTED_PROJECT.type, onToggleSelectedProject),
     takeLatest(FETCH_TASKS.type, onRequestTasks),
     takeLatest(FETCH_TASKS_SUCCESS.type, onReceiveTasks),
     takeLatest(FETCH_INITIAL_DATA_SUCCESS.type, onRequestInitialDataSuccess),
+    takeLatest(ADD_PROJECT.type, onAddProject),
+    takeLatest(UPDATE_PROJECT.type, onUpdateProject),
+    takeLatest(DELETE_PROJECT.type, onDeleteProject),
+    takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
   ]);
 }

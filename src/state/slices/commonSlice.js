@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { put, take, all, race } from "redux-saga/effects";
+import { put, take, all, race, select } from "redux-saga/effects";
 import {
   FETCH_PROJECTS,
   FETCH_PROJECTS_SUCCESS,
@@ -34,7 +34,12 @@ export function* onRequestInitialData(action) {
 }
 
 export function* onRequestInitialDataSuccess(action) {
-  yield put(TOGGLE_SELECTED_PROJECT(1));
+  // const selectedProject = yield select(
+  //   (state) => state.projects.selectedProject
+  // );
+  // if (selectedProject != null) return;
+  // const inboxProject = yield select((state) => state.projects.inboxProject);
+  // yield put(TOGGLE_SELECTED_PROJECT(inboxProject.id));
 }
 
 const initialState = {

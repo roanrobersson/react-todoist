@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import { CircularProgress } from "@mui/material";
 
-const Loading = ({
+const CircularLoading = ({
   color,
   disableShrink,
   noPadding = false,
@@ -32,4 +32,4 @@ const Loading = ({
   );
 };
 
-export default Loading;
+export default CircularLoading;

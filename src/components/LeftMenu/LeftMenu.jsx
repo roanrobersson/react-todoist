@@ -3,7 +3,7 @@ import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { styled } from "@mui/material/styles";
 import { LEFT_MENU_WIDTH } from "../../configs/layout.js";
-import { normalizeColor } from "@/lib/util.js";
+import { getColorHexByColorNumber } from "@/lib/util.js";
 import { useParams } from "react-router-dom";
 import {
   Inbox as InboxIcon,
@@ -14,6 +14,8 @@ import {
   CalendarMonth as CalendarMonthIcon,
   Add as AddIcon,
   MoreHoriz as MoreHorizIcon,
+  BorderColorOutlined as BorderColorIcon,
+  DeleteOutlined as DeleteIcon,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -23,6 +25,9 @@ import {
   Collapse,
   Drawer,
   IconButton,
+  Tooltip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 
 export const StyledDrawer = styled(Drawer)(({ theme }) => ({
@@ -41,13 +46,22 @@ export const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
   paddingBottom: 1,
 }));
 
-const LeftMenu = ({ projects, onProjectItemClick }) => {
+const LeftMenu = ({
+  projects,
+  onProjectItemClick,
+  onAddProjectClick,
+  onEditProjectClick,
+  onDeleteProjectClick,
+}) => {
   const { projectId: projectIdParam } = useParams();
   //const [selectedIndex, setSelectedIndex] = useState(1);
   const [projectListIsOpen, setProjectListIsOpen] = useState(false);
   const [isMouseOverLeftMenu, setIsMouseOverLeftMenu] = useState(false);
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
   const inboxObject = projects.find((project) => project.name == "Inbox");
+  const [projectMenuAnchorEl, setProjectMenuAnchorEl] = useState(null);
+  const [projectMenuProjectId, setProjectMenuProjectId] = useState(0);
+  const isProjectMenuOpen = Boolean(projectMenuAnchorEl);
 
   const handleListItemClick = (event, index) => {
     //setSelectedIndex(index);
@@ -60,6 +74,31 @@ const LeftMenu = ({ projects, onProjectItemClick }) => {
 
   const handleProjectListClick = () => {
     setProjectListIsOpen(!projectListIsOpen);
+  };
+
+  const handleAddProjectClick = (event) => {
+    event.stopPropagation();
+    onAddProjectClick();
+  };
+
+  const handleProjectItemOptionsClick = (event, projectId) => {
+    event.stopPropagation();
+    setProjectMenuAnchorEl(event.currentTarget);
+    setProjectMenuProjectId(projectId);
+  };
+
+  const handleProjectMenuClose = () => {
+    setProjectMenuAnchorEl(null);
+  };
+
+  const handleProjectEditClick = (projectId) => {
+    handleProjectMenuClose();
+    onEditProjectClick(projectId);
+  };
+
+  const handleProjectDeleteClick = (projectId) => {
+    handleProjectMenuClose();
+    onDeleteProjectClick(projectId);
   };
 
   useEffect(() => {
@@ -124,8 +163,9 @@ const LeftMenu = ({ projects, onProjectItemClick }) => {
 
           <IconButton
             color="inherit"
-            onClick={(event) => event.stopPropagation()}
+            onClick={handleAddProjectClick}
             sx={{ ...(!isMouseOverLeftMenu && { visibility: "hidden" }) }}
+            disabled={projects.length >= 8}
           >
             <AddIcon fontSize="small" />
           </IconButton>
@@ -135,6 +175,7 @@ const LeftMenu = ({ projects, onProjectItemClick }) => {
           <List component="div" disablePadding>
             {projects
               .filter((project) => project.name != "Inbox")
+              .sort((a, b) => a.order > b.order)
               .map((project) => (
                 <StyledListItemButton
                   sx={{ pl: 4 }}
@@ -145,24 +186,59 @@ const LeftMenu = ({ projects, onProjectItemClick }) => {
                   <ListItemIcon>
                     <CircleIcon
                       fontSize="small"
-                      htmlColor={normalizeColor(project.color)}
+                      htmlColor={getColorHexByColorNumber(project.color)}
                     />
                   </ListItemIcon>
-                  <ListItemText primary={project.name} />
-                  <IconButton
-                    color="inherit"
-                    onClick={(event) => event.stopPropagation()}
-                    sx={{
-                      ...(!isMouseOverLeftMenu && { visibility: "hidden" }),
+
+                  <ListItemText
+                    primary={project.name}
+                    primaryTypographyProps={{
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
                     }}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
+                  />
+
+                  <Tooltip title="Mais ações de projetos">
+                    <IconButton
+                      color="inherit"
+                      onClick={(event) =>
+                        handleProjectItemOptionsClick(event, project.id)
+                      }
+                      sx={{
+                        ...(!isMouseOverLeftMenu && { visibility: "hidden" }),
+                      }}
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </Tooltip>
                 </StyledListItemButton>
               ))}
           </List>
         </Collapse>
       </List>
+
+      <Menu
+        anchorEl={projectMenuAnchorEl}
+        open={isProjectMenuOpen}
+        onClose={handleProjectMenuClose}
+      >
+        <MenuItem onClick={() => handleProjectEditClick(projectMenuProjectId)}>
+          <ListItemIcon>
+            <BorderColorIcon fontSize="small" htmlColor="gray" />
+          </ListItemIcon>
+          <ListItemText>Editar projeto</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => handleProjectDeleteClick(projectMenuProjectId)}
+        >
+          <ListItemIcon>
+            <DeleteIcon fontSize="small" htmlColor="gray" />
+          </ListItemIcon>
+          <ListItemText>Excluir projeto</ListItemText>
+        </MenuItem>
+      </Menu>
     </StyledDrawer>
   );
 };

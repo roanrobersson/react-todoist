@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Search, SearchIconWrapper, StyledInputBase } from "./styles";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
+import { useNavigate } from "react-router-dom";
 import {
   Menu as MenuIcon,
   Add as AddIcon,
@@ -25,6 +26,7 @@ const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
+  const navigate = useNavigate();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -139,6 +141,7 @@ const TopBar = () => {
               edge="start"
               color="inherit"
               sx={{ mr: 1 }}
+              onClick={() => navigate("/app")}
             >
               <HomeIcon />
             </IconButton>

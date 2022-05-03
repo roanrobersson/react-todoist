@@ -26,6 +26,23 @@ export const clearAllParamsFromActualURL = () => {
   window.history.replaceState(null, null, window.location.pathname);
 };
 
-export const normalizeColor = (colorNumber) =>{
-  return colors[colorNumber];
-}
+export const getColorHexByColorNumber = (colorNumber = 47) => {
+  return colors[colorNumber].code;
+};
+
+export const getColorNameByColorNumber = (colorNumber = 47) => {
+  return colors[colorNumber].name;
+};
+
+export const getColorsAsObjects = () => {
+  return Object.keys(colors).map((key) => {
+    const colorObj = colors[key];
+    return { number: key, name: colorObj.name, code: colorObj.code };
+  });
+};
+
+export const getRandomIntInclusive = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};

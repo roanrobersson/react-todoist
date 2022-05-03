@@ -8,12 +8,16 @@ import { FETCH_TOKEN } from "./state/slices/authSlice";
 import { redirectToAuth, getParamFromActualURL } from "@/lib/util.js";
 import { AUTHORIZED } from "@/state/slices/authSlice.js";
 import LoadingModal from "./components/LoadingModal";
+import LinearLoading from "./components/LinearLoading";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [authModalIsOpen, setAuthModalIsOpen] = useState(false);
   const authState = useSelector((state) => state.auth);
   const commonState = useSelector((state) => state.common);
-  const dispatch = useDispatch();
+  const projects = useSelector((state) => state.projects);
+  const tasks = useSelector((state) => state.tasks);
+  const isLoading = projects.loading || tasks.loading;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -57,11 +61,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path={"/"} element={<Navigate to="/app" />} />
-        <Route path={"/app"} element={<Home />} />
+        <Route exact path={"/"} element={<Navigate to="/app/projects" />} />
+        <Route path={"/app"} element={<Navigate to="/app/projects" />} />
         <Route path={"/app/projects/"} element={<Home />} />
         <Route path={"/app/projects/:projectId"} element={<Home />} />
-        <Route path={"*"} element={<Navigate to={"/app"} />} />
+        <Route path={"*"} element={<Navigate to={"/app/projects"} />} />
       </Routes>
       <AuthModal
         isOpen={authModalIsOpen}
@@ -69,7 +73,8 @@ const App = () => {
         showRetryButton={authState.error}
         onRetryClick={handleRetryClick}
       />
-      <LoadingModal isOpen={commonState.initialData.loading}/>
+      <LoadingModal isOpen={commonState.initialData.loading} />
+      {isLoading && <LinearLoading />}
     </BrowserRouter>
   );
 };

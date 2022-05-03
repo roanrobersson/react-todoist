@@ -30,7 +30,7 @@ export const tasksSlice = createSlice({
       state.error = false;
     },
     FETCH_TASKS_SUCCESS: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
     FETCH_TASKS_ERROR: (state) => {
       state.loading = false;
