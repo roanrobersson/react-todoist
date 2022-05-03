@@ -1,14 +1,10 @@
 import { useContext } from "react";
-import { useDispatch } from "react-redux";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import { Main } from "./styles";
 import { Typography, Divider, Box, Checkbox, Container } from "@mui/material";
-import { useParams } from "react-router-dom";
 
 const ProjectViewer = ({ project, tasks }) => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
-  const dispatch = useDispatch();
-  const { projectId: projectIdParam } = useParams();
 
   const normalizeProjectName = (projectName) => {
     return projectName == "Inbox" ? "Entrada" : projectName;

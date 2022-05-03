@@ -4,7 +4,6 @@ import {
   FETCH_PROJECTS,
   FETCH_PROJECTS_SUCCESS,
   FETCH_PROJECTS_ERROR,
-  TOGGLE_SELECTED_PROJECT,
 } from "./projectsSlice";
 import {
   FETCH_TASKS,

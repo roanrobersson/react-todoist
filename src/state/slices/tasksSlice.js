@@ -25,7 +25,7 @@ export const tasksSlice = createSlice({
       state.loading = true;
       state.error = false;
     },
-    FETCH_TASKS_SUCCESS: (state) => {
+    FETCH_TASKS_SUCCESS: (state, action) => {
       state.loading = false;
       state.data = action.payload;
     },

@@ -69,7 +69,7 @@ const Home = () => {
   };
 
   const tasksOfSelectedProject = () => {
-    return tasks.filter((task) => task.projectId == projectIdParam);
+    return tasks.filter((task) => task.projectId == selectedProjectId);
   };
 
   useEffect(() => {
