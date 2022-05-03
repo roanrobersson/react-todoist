@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Home from "./components/Home";
 import { AUTH_STATE } from "./configs/env.js";
 import AuthModal from "./components/AuthModal";
 import { FETCH_TOKEN } from "./state/slices/authSlice";
-import { redirectToAuth, getParamFromActualURL } from "@/lib/util.js";
+import { redirectToAuth } from "@/lib/util.js";
 import { AUTHORIZED } from "@/state/slices/authSlice.js";
 import LoadingModal from "./components/LoadingModal";
 import LinearLoading from "./components/LinearLoading";
+import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,11 +18,12 @@ const App = () => {
   const projects = useSelector((state) => state.projects);
   const tasks = useSelector((state) => state.tasks);
   const isLoading = projects.loading || tasks.loading;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const state = getParamFromActualURL("state");
-    const code = getParamFromActualURL("code");
+    const state = searchParams.get("state");
+    const code = searchParams.get("code");
 
     if (token) {
       dispatch(AUTHORIZED(token));
@@ -59,7 +60,7 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         <Route exact path={"/"} element={<Navigate to="/app/projects" />} />
         <Route path={"/app"} element={<Navigate to="/app/projects" />} />
@@ -75,7 +76,7 @@ const App = () => {
       />
       <LoadingModal isOpen={commonState.initialData.loading} />
       {isLoading && <LinearLoading />}
-    </BrowserRouter>
+    </>
   );
 };
 

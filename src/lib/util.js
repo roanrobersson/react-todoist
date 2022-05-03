@@ -17,11 +17,6 @@ export const redirectToAuth = (withDelay = false) => {
   }
 };
 
-export const getParamFromActualURL = (paramName) => {
-  const actualURL = new URL(window.location.href);
-  return actualURL.searchParams.get(paramName);
-};
-
 export const clearAllParamsFromActualURL = () => {
   window.history.replaceState(null, null, window.location.pathname);
 };
