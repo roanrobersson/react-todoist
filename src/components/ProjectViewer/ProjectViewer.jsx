@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { Main } from "./styles";
+import { CLOSE_TASK } from "@/state/slices/tasksSlice";
 import {
   MoreHoriz as MoreHorizIcon,
   BorderColorOutlined as BorderColorIcon,
@@ -47,6 +48,8 @@ const ProjectViewer = () => {
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
+
+    dispatch(CLOSE_TASK(taskId));
   };
 
   const handleTaskClick = (taskId) => {};

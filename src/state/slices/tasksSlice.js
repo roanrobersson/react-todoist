@@ -14,8 +14,8 @@ export function* onRequestTasks() {
 export function* onCloseTasks(action) {
   const taskId = action.payload;
   try {
-    const response = yield call(() => getApi().closeTask(taskId));
-    yield put(CLOSE_TASK_SUCCESS(response));
+    yield call(() => getApi().closeTask(taskId));
+    yield put(CLOSE_TASK_SUCCESS(taskId));
   } catch (error) {
     yield put(CLOSE_TASK_ERROR());
   }
@@ -25,6 +25,7 @@ const initialState = {
   data: [],
   loading: false,
   error: false,
+  lastClosedTaskId: null,
 };
 
 export const tasksSlice = createSlice({
@@ -36,8 +37,9 @@ export const tasksSlice = createSlice({
       state.error = false;
     },
     FETCH_TASKS_SUCCESS: (state, action) => {
+      const tasks = action.payload;
       state.loading = false;
-      state.data = action.payload;
+      state.data = tasks;
     },
     FETCH_TASKS_ERROR: (state) => {
       state.loading = false;
@@ -48,8 +50,10 @@ export const tasksSlice = createSlice({
       state.error = false;
     },
     CLOSE_TASK_SUCCESS: (state, action) => {
+      const taskId = action.payload;
       state.loading = false;
-      //state.data = action.payload;
+      state.data = state.data.filter((task) => task.id != taskId);
+      state.lastClosedTaskId = taskId;
     },
     CLOSE_TASK_ERROR: (state) => {
       state.loading = false;

@@ -63,9 +63,10 @@ export const projectsSlice = createSlice({
       state.error = false;
     },
     FETCH_PROJECTS_SUCCESS: (state, action) => {
+      const projects = action.payload;
       state.loading = false;
-      state.data = action.payload;
-      state.inboxProjectId = action.payload.find(
+      state.data = projects;
+      state.inboxProjectId = projects.find(
         (project) => project.name == "Inbox"
       ).id;
     },
@@ -74,16 +75,18 @@ export const projectsSlice = createSlice({
       state.error = true;
     },
     TOGGLE_SELECTED_PROJECT: (state, action) => {
-      state.selectedProjectId = action.payload;
+      const projectId = action.payload;
+      state.selectedProjectId = projectId;
     },
     ADD_PROJECT: (state, action) => {
       state.loading = true;
       state.addingProject = true;
     },
     ADD_PROJECT_SUCCESS: (state, action) => {
+      const project = action.payload;
       state.loading = false;
       state.addingProject = false;
-      state.data = [...state.data, action.payload];
+      state.data = [...state.data, project];
     },
     ADD_PROJECT_ERROR: (state, action) => {
       state.loading = false;
@@ -93,11 +96,12 @@ export const projectsSlice = createSlice({
       state.loading = true;
     },
     UPDATE_PROJECT_SUCCESS: (state, action) => {
-      state.loading = false;
+      const updatedProject = action.payload;
       const newStateData = state.data.filter(
-        (project) => project.id != action.payload.id
+        (project) => project.id != updatedProject.id
       );
-      newStateData.push(action.payload);
+      newStateData.push(updatedProject);
+      state.loading = false;
       state.data = newStateData;
     },
     UPDATE_PROJECT_ERROR: (state, action) => {
@@ -108,8 +112,9 @@ export const projectsSlice = createSlice({
       state.loading = true;
     },
     DELETE_PROJECT_SUCCESS: (state, action) => {
+      const projectId = action.payload;
       state.loading = false;
-      state.data = state.data.filter((project) => project.id != action.payload);
+      state.data = state.data.filter((project) => project.id != projectId);
     },
     DELETE_PROJECT_ERROR: (state, action) => {
       state.loading = false;

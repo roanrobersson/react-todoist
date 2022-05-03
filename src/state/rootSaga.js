@@ -24,7 +24,12 @@ import {
   onDeleteProject,
   onDeleteProjectSuccess,
 } from "./slices/projectsSlice";
-import { FETCH_TASKS, onRequestTasks } from "./slices/tasksSlice.js";
+import {
+  FETCH_TASKS,
+  CLOSE_TASK,
+  onRequestTasks,
+  onCloseTasks,
+} from "./slices/tasksSlice.js";
 
 export default function* rootSaga() {
   return yield all([
@@ -39,5 +44,6 @@ export default function* rootSaga() {
     takeLatest(UPDATE_PROJECT.type, onUpdateProject),
     takeLatest(DELETE_PROJECT.type, onDeleteProject),
     takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
+    takeLatest(CLOSE_TASK.type, onCloseTasks),
   ]);
 }
