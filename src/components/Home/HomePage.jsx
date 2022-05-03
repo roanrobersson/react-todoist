@@ -17,14 +17,14 @@ import {
 const Home = () => {
   const navigate = useNavigate();
   const projects = useSelector((state) => state.projects.data);
-  const inboxProject = useSelector((state) => state.projects.inboxProject);
+  const inboxProjectId = useSelector((state) => state.projects.inboxProjectId);
   const tasks = useSelector((state) => state.tasks.data);
   const dispatch = useDispatch();
   const { projectId: projectIdParam } = useParams();
   const [projectModalType, setProjectModalType] = useState(null);
   const [projectModalInitialData, setProjectModalInitialData] = useState(null);
-  const selectedProject = useSelector(
-    (state) => state.projects.selectedProject
+  const selectedProjectId = useSelector(
+    (state) => state.projects.selectedProjectId
   );
 
   const findProjectById = (projectId) => {
@@ -64,23 +64,27 @@ const Home = () => {
     return projects.find((project) => project.id == id);
   };
 
+  const selectedProject = () => {
+    return projects.find((project) => project.id == selectedProjectId);
+  };
+
   const tasksOfSelectedProject = () => {
     return tasks.filter((task) => task.projectId == projectIdParam);
   };
 
   useEffect(() => {
-    if (inboxProject != null && projectIdParam == undefined) {
-      dispatch(TOGGLE_SELECTED_PROJECT(inboxProject.id));
+    if (inboxProjectId != null && projectIdParam == undefined) {
+      dispatch(TOGGLE_SELECTED_PROJECT(inboxProjectId));
       return;
     }
     if (projectIdParam != undefined && getProjectById(projectIdParam) != null) {
       dispatch(TOGGLE_SELECTED_PROJECT(projectIdParam));
     }
-  }, [projectIdParam, inboxProject]);
+  }, [projectIdParam, inboxProjectId]);
 
   useEffect(() => {
-    selectedProject && navigate("/app/projects/" + selectedProject.id);
-  }, [selectedProject]);
+    selectedProjectId && navigate("/app/projects/" + selectedProjectId);
+  }, [selectedProjectId]);
 
   return (
     <>
@@ -89,13 +93,15 @@ const Home = () => {
         <Box sx={{ display: "flex" }}>
           <LeftMenu
             projects={projects}
+            selectedProjectId={selectedProjectId}
             onProjectItemClick={handleMenuProjectItemClick}
             onAddProjectClick={handleMenuAddProjectClick}
             onEditProjectClick={handleEditProjectClick}
             onDeleteProjectClick={handleDeleteProjectClick}
           />
+
           <ProjectViewer
-            project={selectedProject}
+            project={selectedProject()}
             tasks={tasksOfSelectedProject()}
           />
         </Box>

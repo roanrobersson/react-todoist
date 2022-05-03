@@ -11,8 +11,6 @@ export function* onRequestProjects() {
   }
 }
 
-export function* onToggleSelectedProject(action) {}
-
 export function* onAddProject(action) {
   try {
     const response = yield call(() => getApi().addProject(action.payload));
@@ -41,16 +39,16 @@ export function* onDeleteProject(action) {
 }
 
 export function* onDeleteProjectSuccess(action) {
-  const inboxProject = yield select((state) => state.projects.inboxProject);
-  yield put(TOGGLE_SELECTED_PROJECT(inboxProject.id));
+  const inboxProjectId = yield select((state) => state.projects.inboxProjectId);
+  yield put(TOGGLE_SELECTED_PROJECT(inboxProjectId));
 }
 
 const initialState = {
   data: [],
   loading: false,
   error: false,
-  selectedProject: null,
-  inboxProject: null,
+  selectedProjectId: null,
+  inboxProjectId: null,
 };
 
 export const projectsSlice = createSlice({
@@ -64,19 +62,16 @@ export const projectsSlice = createSlice({
     FETCH_PROJECTS_SUCCESS: (state, action) => {
       state.loading = false;
       state.data = action.payload;
-      state.inboxProject = action.payload.find(
+      state.inboxProjectId = action.payload.find(
         (project) => project.name == "Inbox"
-      );
+      ).id;
     },
     FETCH_PROJECTS_ERROR: (state) => {
       state.loading = false;
       state.error = true;
     },
     TOGGLE_SELECTED_PROJECT: (state, action) => {
-      const project = state.data.find(
-        (project) => project.id == action.payload
-      );
-      state.selectedProject = project;
+      state.selectedProjectId = action.payload;
     },
     ADD_PROJECT: (state, action) => {
       state.loading = true;

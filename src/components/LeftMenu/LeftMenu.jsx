@@ -48,6 +48,7 @@ export const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
 
 const LeftMenu = ({
   projects,
+  selectedProjectId,
   onProjectItemClick,
   onAddProjectClick,
   onEditProjectClick,
@@ -103,12 +104,12 @@ const LeftMenu = ({
 
   useEffect(() => {
     let selectedProject = projects.find(
-      (project) => project.id == projectIdParam
+      (project) => project.id == selectedProjectId
     );
     if (selectedProject && selectedProject.name != "Inbox") {
       setProjectListIsOpen(true);
     }
-  }, [projects]);
+  }, [selectedProjectId]);
 
   return (
     <StyledDrawer

@@ -11,10 +11,6 @@ export function* onRequestTasks() {
   }
 }
 
-export function* onReceiveTasks(action) {
-  yield put(SET_TASKS(action.payload));
-}
-
 const initialState = {
   data: [],
   loading: false,
@@ -31,21 +27,15 @@ export const tasksSlice = createSlice({
     },
     FETCH_TASKS_SUCCESS: (state) => {
       state.loading = false;
+      state.data = action.payload;
     },
     FETCH_TASKS_ERROR: (state) => {
       state.loading = false;
       state.error = true;
     },
-    SET_TASKS: (state, action) => {
-      state.data = action.payload;
-    },
   },
 });
 
-export const {
-  FETCH_TASKS,
-  FETCH_TASKS_SUCCESS,
-  SET_TASKS,
-  FETCH_TASKS_ERROR,
-} = tasksSlice.actions;
+export const { FETCH_TASKS, FETCH_TASKS_SUCCESS, FETCH_TASKS_ERROR } =
+  tasksSlice.actions;
 export default tasksSlice.reducer;

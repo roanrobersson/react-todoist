@@ -33,15 +33,6 @@ export function* onRequestInitialData(action) {
     : put(FETCH_INITIAL_DATA_ERROR());
 }
 
-export function* onRequestInitialDataSuccess(action) {
-  // const selectedProject = yield select(
-  //   (state) => state.projects.selectedProject
-  // );
-  // if (selectedProject != null) return;
-  // const inboxProject = yield select((state) => state.projects.inboxProject);
-  // yield put(TOGGLE_SELECTED_PROJECT(inboxProject.id));
-}
-
 const initialState = {
   initialData: {
     loading: false,
