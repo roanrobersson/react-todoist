@@ -3,27 +3,12 @@ import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { Main } from "./styles";
 import { CLOSE_TASK } from "@/state/slices/tasksSlice";
-import {
-  MoreHoriz as MoreHorizIcon,
-  BorderColorOutlined as BorderColorIcon,
-} from "@mui/icons-material";
-import {
-  Typography,
-  Divider,
-  Box,
-  Checkbox,
-  Container,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  IconButton,
-} from "@mui/material";
+import TaskList from "@/components/TaskList";
+import TaskListItem from "@/components/TaskListItem";
+import { Typography, Container } from "@mui/material";
 
 const ProjectViewer = () => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
-  const [checked, setChecked] = useState([0]);
-  const [hoveredTaskId, setHoveredTaskId] = useState(null);
   const dispatch = useDispatch();
   const selectedProjectId = useSelector(
     (state) => state.projects.selectedProjectId
@@ -40,15 +25,6 @@ const ProjectViewer = () => {
   };
 
   const handleTaskCheckToggle = (taskId) => {
-    const currentIndex = checked.indexOf(taskId);
-    const newChecked = [...checked];
-    if (currentIndex === -1) {
-      newChecked.push(taskId);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-
     dispatch(CLOSE_TASK(taskId));
   };
 
@@ -67,64 +43,20 @@ const ProjectViewer = () => {
           {normalizeProjectName(selectedProject?.name)}
         </Typography>
 
-        <List sx={{ width: "100%" }}>
+        <TaskList>
           {tasks
             .sort((a, b) => a.order > b.order)
             .map((task) => (
-              <Box
+              <TaskListItem
                 key={task.id}
-                onMouseEnter={() => setHoveredTaskId(task.id)}
-                onMouseLeave={() => setHoveredTaskId(null)}
-              >
-                <ListItem
-                  disablePadding
-                  secondaryAction={
-                    <Box
-                      sx={{
-                        color: "gray",
-                        ...(hoveredTaskId != task.id && {
-                          visibility: "hidden",
-                        }),
-                      }}
-                    >
-                      <IconButton
-                        edge="end"
-                        sx={{ mr: 1 }}
-                        onClick={handleTaskEditClick}
-                      >
-                        <BorderColorIcon />
-                      </IconButton>
-                      <IconButton edge="end" onClick={handleTaskOptionsClick}>
-                        <MoreHorizIcon />
-                      </IconButton>
-                    </Box>
-                  }
-                >
-                  <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(task.id) !== -1}
-                    onClick={() => handleTaskCheckToggle(task.id)}
-                    disableRipple
-                  />
-                  <ListItemButton
-                    dense
-                    onClick={handleTaskClick}
-                    sx={{
-                      "&.MuiListItemButton-root:hover": {
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    <ListItemText
-                      primary={task.content}
-                      secondary={task.description}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <Divider />
-              </Box>
+                task={task}
+                onTaskCheckToggle={handleTaskCheckToggle}
+                onTaskClick={handleTaskClick}
+                onTaskEditClick={handleTaskEditClick}
+                onTaskOptionsClick={handleTaskOptionsClick}
+              />
             ))}
-        </List>
+        </TaskList>
 
         {!selectedProject && (
           <Typography>Nenhum projeto selecionado</Typography>
