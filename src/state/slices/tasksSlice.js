@@ -21,11 +21,22 @@ export function* onCloseTasks(action) {
   }
 }
 
+export function* onReopenTask(action) {
+  const taskId = action.payload;
+  try {
+    yield call(() => getApi().reopenTask(taskId));
+    yield put(REOPEN_TASK_SUCCESS(taskId));
+  } catch (error) {
+    yield put(REOPEN_TASK_ERROR());
+  }
+}
+
 const initialState = {
   data: [],
   loading: false,
   error: false,
   lastClosedTaskId: null,
+  lastClosedTask: null,
 };
 
 export const tasksSlice = createSlice({
@@ -52,10 +63,25 @@ export const tasksSlice = createSlice({
     CLOSE_TASK_SUCCESS: (state, action) => {
       const taskId = action.payload;
       state.loading = false;
-      state.data = state.data.filter((task) => task.id != taskId);
+      state.lastClosedTask = state.data.find((task) => task.id == taskId);
       state.lastClosedTaskId = taskId;
+      state.data = state.data.filter((task) => task.id != taskId);
     },
     CLOSE_TASK_ERROR: (state) => {
+      state.loading = false;
+      state.error = true;
+    },
+    REOPEN_TASK: (state) => {
+      state.loading = true;
+      state.error = false;
+    },
+    REOPEN_TASK_SUCCESS: (state, action) => {
+      state.loading = false;
+      state.data = [...state.data, state.lastClosedTask];
+      state.lastClosedTaskId = null;
+      state.lastClosedTask = null;
+    },
+    REOPEN_TASK_ERROR: (state) => {
       state.loading = false;
       state.error = true;
     },
@@ -69,5 +95,8 @@ export const {
   CLOSE_TASK,
   CLOSE_TASK_SUCCESS,
   CLOSE_TASK_ERROR,
+  REOPEN_TASK,
+  REOPEN_TASK_SUCCESS,
+  REOPEN_TASK_ERROR,
 } = tasksSlice.actions;
 export default tasksSlice.reducer;

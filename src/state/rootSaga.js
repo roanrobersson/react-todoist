@@ -1,4 +1,4 @@
-import { all, takeLatest } from "redux-saga/effects";
+import { all, takeLatest, takeEvery } from "redux-saga/effects";
 import {
   FETCH_INITIAL_DATA,
   onAuthorized as commonSliceOnAuthorized,
@@ -27,8 +27,10 @@ import {
 import {
   FETCH_TASKS,
   CLOSE_TASK,
+  REOPEN_TASK,
   onRequestTasks,
   onCloseTasks,
+  onReopenTask,
 } from "./slices/tasksSlice.js";
 
 export default function* rootSaga() {
@@ -44,6 +46,7 @@ export default function* rootSaga() {
     takeLatest(UPDATE_PROJECT.type, onUpdateProject),
     takeLatest(DELETE_PROJECT.type, onDeleteProject),
     takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
-    takeLatest(CLOSE_TASK.type, onCloseTasks),
+    takeEvery(CLOSE_TASK.type, onCloseTasks),
+    takeLatest(REOPEN_TASK.type, onReopenTask),
   ]);
 }

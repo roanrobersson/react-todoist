@@ -15,15 +15,15 @@ import {
 
 const TaskListItem = ({
   task,
-  onTaskCheckToggle,
-  onTaskClick,
-  onTaskEditClick,
-  onTaskOptionsClick,
+  onCheckToggle,
+  onClick,
+  onEditClick,
+  onOptionsClick,
 }) => {
   const [checked, setChecked] = useState([0]);
   const [hoveredTaskId, setHoveredTaskId] = useState(null);
 
-  const handleTaskCheckToggle = (taskId) => {
+  const handleCheckToggle = (taskId) => {
     const currentIndex = checked.indexOf(taskId);
     const newChecked = [...checked];
     if (currentIndex === -1) {
@@ -33,19 +33,19 @@ const TaskListItem = ({
     }
     setChecked(newChecked);
 
-    onTaskCheckToggle(taskId);
+    onCheckToggle(taskId);
   };
 
-  const handleTaskClick = (taskId) => {
-    onTaskClick(taskId);
+  const handleClick = (taskId) => {
+    onClick(taskId);
   };
 
-  const handleTaskEditClick = (taskId) => {
-    onTaskEditClick(taskId);
+  const handleEditClick = (taskId) => {
+    onEditClick(taskId);
   };
 
-  const handleTaskOptionsClick = (taskId) => {
-    onTaskOptionsClick(taskId);
+  const handleOptionsClick = (taskId) => {
+    onOptionsClick(taskId);
   };
 
   return (
@@ -64,10 +64,10 @@ const TaskListItem = ({
               }),
             }}
           >
-            <IconButton edge="end" sx={{ mr: 1 }} onClick={handleTaskEditClick}>
+            <IconButton edge="end" sx={{ mr: 1 }} onClick={handleEditClick}>
               <BorderColorIcon />
             </IconButton>
-            <IconButton edge="end" onClick={handleTaskOptionsClick}>
+            <IconButton edge="end" onClick={handleOptionsClick}>
               <MoreHorizIcon />
             </IconButton>
           </Box>
@@ -76,12 +76,12 @@ const TaskListItem = ({
         <Checkbox
           edge="start"
           checked={checked.indexOf(task.id) !== -1}
-          onClick={() => handleTaskCheckToggle(task.id)}
+          onClick={() => handleCheckToggle(task.id)}
           disableRipple
         />
         <ListItemButton
           dense
-          onClick={handleTaskClick}
+          onClick={handleClick}
           sx={{
             "&.MuiListItemButton-root:hover": {
               backgroundColor: "transparent",

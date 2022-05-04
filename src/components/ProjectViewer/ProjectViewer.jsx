@@ -1,15 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { Main } from "./styles";
-import { CLOSE_TASK } from "@/state/slices/tasksSlice";
+import { CLOSE_TASK, REOPEN_TASK } from "@/state/slices/tasksSlice";
 import TaskList from "@/components/TaskList";
 import TaskListItem from "@/components/TaskListItem";
+import TaskSnackBar from "@/components/TaskSnackBar";
 import { Typography, Container } from "@mui/material";
 
 const ProjectViewer = () => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
   const dispatch = useDispatch();
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const selectedProjectId = useSelector(
     (state) => state.projects.selectedProjectId
   );
@@ -19,6 +21,13 @@ const ProjectViewer = () => {
   const tasks = useSelector((state) => state.tasks.data).filter(
     (task) => task.projectId == selectedProjectId
   );
+  const lastClosedTaskId = useSelector((state) => state.tasks.lastClosedTaskId);
+
+  useEffect(() => {
+    if (lastClosedTaskId != null) {
+      setIsSnackBarOpen(true);
+    }
+  }, [lastClosedTaskId]);
 
   const normalizeProjectName = (projectName) => {
     return projectName == "Inbox" ? "Entrada" : projectName;
@@ -33,6 +42,14 @@ const ProjectViewer = () => {
   const handleTaskEditClick = (taskId) => {};
 
   const handleTaskOptionsClick = (taskId) => {};
+
+  const handleSnackBarClose = () => {
+    setIsSnackBarOpen(false);
+  };
+
+  const handleSnackBarUndo = () => {
+    dispatch(REOPEN_TASK(lastClosedTaskId));
+  };
 
   if (!selectedProject) return null;
 
@@ -50,10 +67,10 @@ const ProjectViewer = () => {
               <TaskListItem
                 key={task.id}
                 task={task}
-                onTaskCheckToggle={handleTaskCheckToggle}
-                onTaskClick={handleTaskClick}
-                onTaskEditClick={handleTaskEditClick}
-                onTaskOptionsClick={handleTaskOptionsClick}
+                onCheckToggle={handleTaskCheckToggle}
+                onClick={handleTaskClick}
+                onEditClick={handleTaskEditClick}
+                onOptionsClick={handleTaskOptionsClick}
               />
             ))}
         </TaskList>
@@ -62,6 +79,12 @@ const ProjectViewer = () => {
           <Typography>Nenhum projeto selecionado</Typography>
         )}
       </Main>
+
+      <TaskSnackBar
+        isOpen={isSnackBarOpen}
+        onClose={handleSnackBarClose}
+        onUndo={handleSnackBarUndo}
+      />
     </Container>
   );
 };
