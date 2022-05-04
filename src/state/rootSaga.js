@@ -28,9 +28,11 @@ import {
   FETCH_TASKS,
   CLOSE_TASK,
   REOPEN_TASK,
+  DELETE_TASK,
   onRequestTasks,
   onCloseTasks,
   onReopenTask,
+  onDeleteTask,
 } from "./slices/tasksSlice.js";
 
 export default function* rootSaga() {
@@ -48,5 +50,6 @@ export default function* rootSaga() {
     takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
     takeEvery(CLOSE_TASK.type, onCloseTasks),
     takeLatest(REOPEN_TASK.type, onReopenTask),
+    takeLatest(DELETE_TASK.type, onDeleteTask),
   ]);
 }

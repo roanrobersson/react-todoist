@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TaskOptionsMenu from "@/components/TaskOptionsMenu";
 import {
   MoreHoriz as MoreHorizIcon,
   BorderColorOutlined as BorderColorIcon,
@@ -44,8 +45,9 @@ const TaskListItem = ({
     onEditClick(taskId);
   };
 
-  const handleOptionsClick = (taskId) => {
-    onOptionsClick(taskId);
+  const handleOptionsClick = (event, taskId) => {
+    event.stopPropagation();
+    onOptionsClick(event, taskId);
   };
 
   return (
@@ -67,7 +69,10 @@ const TaskListItem = ({
             <IconButton edge="end" sx={{ mr: 1 }} onClick={handleEditClick}>
               <BorderColorIcon />
             </IconButton>
-            <IconButton edge="end" onClick={handleOptionsClick}>
+            <IconButton
+              edge="end"
+              onClick={(event) => handleOptionsClick(event, task.id)}
+            >
               <MoreHorizIcon />
             </IconButton>
           </Box>

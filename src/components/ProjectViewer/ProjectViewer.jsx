@@ -2,16 +2,25 @@ import { useContext, useEffect, useState } from "react";
 import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { Main } from "./styles";
-import { CLOSE_TASK, REOPEN_TASK } from "@/state/slices/tasksSlice";
 import TaskList from "@/components/TaskList";
 import TaskListItem from "@/components/TaskListItem";
 import TaskSnackBar from "@/components/TaskSnackBar";
+import TaskOptionsMenu from "@/components/TaskOptionsMenu";
 import { Typography, Container } from "@mui/material";
+import {
+  CLOSE_TASK,
+  REOPEN_TASK,
+  DELETE_TASK,
+} from "@/state/slices/tasksSlice";
 
 const ProjectViewer = () => {
   const { isOpen, setIsOpen } = useContext(LeftMenuContext);
   const dispatch = useDispatch();
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [taskOptionsMenuAnchorEl, setTaskOptionsMenuAnchorEl] = useState(null);
+  const [taskOptionsMenuTaskId, setTaskOptionsMenuTaskId] = useState(0);
+  const isTaskOptionsMenuOpen = Boolean(taskOptionsMenuAnchorEl);
+
   const selectedProjectId = useSelector(
     (state) => state.projects.selectedProjectId
   );
@@ -41,7 +50,10 @@ const ProjectViewer = () => {
 
   const handleTaskEditClick = (taskId) => {};
 
-  const handleTaskOptionsClick = (taskId) => {};
+  const handleTaskOptionsClick = (event, taskId) => {
+    setTaskOptionsMenuAnchorEl(event.currentTarget);
+    setTaskOptionsMenuTaskId(taskId);
+  };
 
   const handleSnackBarClose = () => {
     setIsSnackBarOpen(false);
@@ -49,6 +61,18 @@ const ProjectViewer = () => {
 
   const handleSnackBarUndo = () => {
     dispatch(REOPEN_TASK(lastClosedTaskId));
+  };
+
+  const handleTaskMenuClose = () => {
+    setTaskOptionsMenuAnchorEl(null);
+  };
+
+  const handleTaskMenuEditClick = (taskId) => {
+    //
+  };
+
+  const handleTaskMenuDeleteClick = (taskId) => {
+    dispatch(DELETE_TASK(taskId));
   };
 
   if (!selectedProject) return null;
@@ -74,6 +98,15 @@ const ProjectViewer = () => {
               />
             ))}
         </TaskList>
+
+        <TaskOptionsMenu
+          isOpen={isTaskOptionsMenuOpen}
+          anchorEl={taskOptionsMenuAnchorEl}
+          taskId={taskOptionsMenuTaskId}
+          onClose={handleTaskMenuClose}
+          onEditClick={handleTaskMenuEditClick}
+          onDeleteClick={handleTaskMenuDeleteClick}
+        />
 
         {!selectedProject && (
           <Typography>Nenhum projeto selecionado</Typography>

@@ -31,6 +31,16 @@ export function* onReopenTask(action) {
   }
 }
 
+export function* onDeleteTask(action) {
+  const taskId = action.payload;
+  try {
+    yield call(() => getApi().deleteTask(taskId));
+    yield put(DELETE_TASK_SUCCESS(taskId));
+  } catch (error) {
+    yield put(DELETE_TASK_ERROR());
+  }
+}
+
 const initialState = {
   data: [],
   loading: false,
@@ -85,6 +95,18 @@ export const tasksSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    DELETE_TASK: (state, action) => {
+      state.loading = true;
+    },
+    DELETE_TASK_SUCCESS: (state, action) => {
+      const taskId = action.payload;
+      state.loading = false;
+      state.data = state.data.filter((task) => task.id != taskId);
+    },
+    DELETE_TASK_ERROR: (state, action) => {
+      state.loading = false;
+      state.error = true;
+    },
   },
 });
 
@@ -98,5 +120,8 @@ export const {
   REOPEN_TASK,
   REOPEN_TASK_SUCCESS,
   REOPEN_TASK_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_SUCCESS,
+  DELETE_TASK_ERROR,
 } = tasksSlice.actions;
 export default tasksSlice.reducer;
