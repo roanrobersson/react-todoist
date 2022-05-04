@@ -26,13 +26,15 @@ import {
 } from "./slices/projectsSlice";
 import {
   FETCH_TASKS,
+  ADD_TASK,
+  DELETE_TASK,
   CLOSE_TASK,
   REOPEN_TASK,
-  DELETE_TASK,
   onRequestTasks,
+  onAddTask,
+  onDeleteTask,
   onCloseTasks,
   onReopenTask,
-  onDeleteTask,
 } from "./slices/tasksSlice.js";
 
 export default function* rootSaga() {
@@ -40,16 +42,19 @@ export default function* rootSaga() {
     takeLatest(FETCH_TOKEN.type, onRequestToken),
     takeLatest(FETCH_TOKEN_SUCCESS.type, onReceiveToken),
     takeLatest(AUTHORIZED.type, authSliceOnAuthorized),
-    takeLatest(FETCH_INITIAL_DATA.type, onRequestInitialData),
-    takeLatest(FETCH_PROJECTS.type, onRequestProjects),
     takeLatest(AUTHORIZED.type, commonSliceOnAuthorized),
-    takeLatest(FETCH_TASKS.type, onRequestTasks),
+    takeLatest(FETCH_INITIAL_DATA.type, onRequestInitialData),
+
+    takeLatest(FETCH_PROJECTS.type, onRequestProjects),
     takeLatest(ADD_PROJECT.type, onAddProject),
     takeLatest(UPDATE_PROJECT.type, onUpdateProject),
     takeLatest(DELETE_PROJECT.type, onDeleteProject),
     takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
+    
+    takeLatest(FETCH_TASKS.type, onRequestTasks),
+    takeLatest(ADD_TASK.type, onAddTask),
+    takeLatest(DELETE_TASK.type, onDeleteTask),
     takeEvery(CLOSE_TASK.type, onCloseTasks),
     takeLatest(REOPEN_TASK.type, onReopenTask),
-    takeLatest(DELETE_TASK.type, onDeleteTask),
   ]);
 }

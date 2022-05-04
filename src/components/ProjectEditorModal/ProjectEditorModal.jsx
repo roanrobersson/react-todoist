@@ -26,7 +26,7 @@ const modalBoxStyle = {
   overflow: "hidden",
 };
 
-const ProjectModal = ({
+const ProjectEditorModal = ({
   isOpen,
   title,
   initialData,
@@ -35,13 +35,11 @@ const ProjectModal = ({
   onCancel,
   onSubmit,
 }) => {
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [colorNumber, setColorNumber] = useState(getRandomIntInclusive(30, 49));
 
   useEffect(() => {
     if (initialData) {
-      setId(initialData.id);
       setName(initialData.name);
       setColorNumber(initialData.color);
     }
@@ -56,7 +54,7 @@ const ProjectModal = ({
   };
 
   const handleSubmit = () => {
-    onSubmit({ ...initialData, id: id, name: name, color: colorNumber });
+    onSubmit({ ...initialData, name: name, color: colorNumber });
   };
 
   return (
@@ -131,4 +129,4 @@ const ProjectModal = ({
   );
 };
 
-export default ProjectModal;
+export default ProjectEditorModal;

@@ -93,7 +93,7 @@ const TaskListItem = ({
             },
           }}
         >
-          <ListItemText primary={task.content} secondary={task.description} />
+          <ListItemText primary={task.content} secondary={task.description} sx={{pr: 7}}/>
         </ListItemButton>
       </ListItem>
       <Divider />

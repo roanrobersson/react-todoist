@@ -6,9 +6,12 @@ import TaskList from "@/components/TaskList";
 import TaskListItem from "@/components/TaskListItem";
 import TaskSnackBar from "@/components/TaskSnackBar";
 import TaskOptionsMenu from "@/components/TaskOptionsMenu";
-import { Typography, Container } from "@mui/material";
+import TaskEditor from "@/components/TaskEditor";
+import { Typography, Container, Button } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material";
 import {
   CLOSE_TASK,
+  ADD_TASK,
   REOPEN_TASK,
   DELETE_TASK,
 } from "@/state/slices/tasksSlice";
@@ -20,7 +23,8 @@ const ProjectViewer = () => {
   const [taskOptionsMenuAnchorEl, setTaskOptionsMenuAnchorEl] = useState(null);
   const [taskOptionsMenuTaskId, setTaskOptionsMenuTaskId] = useState(0);
   const isTaskOptionsMenuOpen = Boolean(taskOptionsMenuAnchorEl);
-
+  const [taskEditorType, setTaskEditorType] = useState(null);
+  const [taskEditorInitialData, setTaskEditorInitialData] = useState(null);
   const selectedProjectId = useSelector(
     (state) => state.projects.selectedProjectId
   );
@@ -75,6 +79,23 @@ const ProjectViewer = () => {
     dispatch(DELETE_TASK(taskId));
   };
 
+  const handleAddTaskClick = () => {
+    setTaskEditorType("add");
+  };
+
+  const handleTaskEditorCancel = () => {
+    setTaskEditorType(null);
+  };
+
+  const handleTaskEditorSubmit = (task) => {
+    if (taskEditorType == "add") {
+      task.project_id = selectedProjectId;
+      dispatch(ADD_TASK(task));
+    }
+    //else dispatch(UPDATE_TASK(task));
+    setTaskEditorType(null);
+  };
+
   if (!selectedProject) return null;
 
   return (
@@ -98,6 +119,24 @@ const ProjectViewer = () => {
               />
             ))}
         </TaskList>
+
+        {taskEditorType ? (
+          <TaskEditor
+            initialData={taskEditorInitialData}
+            cancelButtonText="Cancelar"
+            confirmButtonText="Salvar"
+            onCancel={handleTaskEditorCancel}
+            onSubmit={handleTaskEditorSubmit}
+          />
+        ) : (
+          <Button
+            variant="text"
+            startIcon={<AddIcon />}
+            onClick={handleAddTaskClick}
+          >
+            Adicionar tarefa
+          </Button>
+        )}
 
         <TaskOptionsMenu
           isOpen={isTaskOptionsMenuOpen}

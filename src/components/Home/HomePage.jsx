@@ -6,7 +6,7 @@ import ProjectViewer from "@/components/ProjectViewer";
 import LeftMenuProvider from "@/providers/LeftMenuProvider";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import ProjectModal from "@/components/ProjectModal";
+import ProjectEditorModal from "@/components/ProjectEditorModal";
 import {
   TOGGLE_SELECTED_PROJECT,
   ADD_PROJECT,
@@ -91,7 +91,7 @@ const Home = () => {
         </Box>
       </LeftMenuProvider>
       {projectModalType && (
-        <ProjectModal
+        <ProjectEditorModal
           isOpen={projectModalType != null}
           title={
             projectModalType == "add" ? "Adicionar projeto" : "Editar projeto"

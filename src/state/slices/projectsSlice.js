@@ -74,18 +74,12 @@ export const projectsSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
-    TOGGLE_SELECTED_PROJECT: (state, action) => {
-      const projectId = action.payload;
-      state.selectedProjectId = projectId;
-    },
     ADD_PROJECT: (state, action) => {
       state.loading = true;
-      state.addingProject = true;
     },
     ADD_PROJECT_SUCCESS: (state, action) => {
       const project = action.payload;
       state.loading = false;
-      state.addingProject = false;
       state.data = [...state.data, project];
     },
     ADD_PROJECT_ERROR: (state, action) => {
@@ -120,6 +114,10 @@ export const projectsSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    TOGGLE_SELECTED_PROJECT: (state, action) => {
+      const projectId = action.payload;
+      state.selectedProjectId = projectId;
+    },
   },
 });
 
@@ -127,7 +125,6 @@ export const {
   FETCH_PROJECTS,
   FETCH_PROJECTS_SUCCESS,
   FETCH_PROJECTS_ERROR,
-  TOGGLE_SELECTED_PROJECT,
   ADD_PROJECT,
   ADD_PROJECT_SUCCESS,
   ADD_PROJECT_ERROR,
@@ -137,5 +134,6 @@ export const {
   DELETE_PROJECT,
   DELETE_PROJECT_SUCCESS,
   DELETE_PROJECT_ERROR,
+  TOGGLE_SELECTED_PROJECT,
 } = projectsSlice.actions;
 export default projectsSlice.reducer;
