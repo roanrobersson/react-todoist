@@ -48,6 +48,7 @@ const Home = () => {
     if (projectModalType == "add") dispatch(ADD_PROJECT(project));
     else dispatch(UPDATE_PROJECT(project));
     setProjectModalType(null);
+    setProjectModalInitialData(null);
   };
 
   const handleEditProjectClick = (projectId) => {

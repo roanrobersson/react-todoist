@@ -21,6 +21,16 @@ export function* onAddTask(action) {
   }
 }
 
+export function* onUpdateTask(action) {
+  const task = action.payload;
+  try {
+    yield call(() => getApi().updateTask(task.id, task));
+    yield put(UPDATE_TASK_SUCCESS(task));
+  } catch (error) {
+    yield put(UPDATE_TASK_ERROR());
+  }
+}
+
 export function* onDeleteTask(action) {
   const taskId = action.payload;
   try {
@@ -88,6 +98,22 @@ export const tasksSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    UPDATE_TASK: (state, action) => {
+      state.loading = true;
+    },
+    UPDATE_TASK_SUCCESS: (state, action) => {
+      const updatedTask = action.payload;
+      const newStateData = state.data.filter(
+        (task) => task.id != updatedTask.id
+      );
+      newStateData.push(updatedTask);
+      state.loading = false;
+      state.data = newStateData;
+    },
+    UPDATE_TASK_ERROR: (state, action) => {
+      state.loading = false;
+      state.error = true;
+    },
     DELETE_TASK: (state, action) => {
       state.loading = true;
     },
@@ -139,6 +165,9 @@ export const {
   ADD_TASK,
   ADD_TASK_SUCCESS,
   ADD_TASK_ERROR,
+  UPDATE_TASK,
+  UPDATE_TASK_SUCCESS,
+  UPDATE_TASK_ERROR,
   DELETE_TASK,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_ERROR,

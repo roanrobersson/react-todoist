@@ -141,7 +141,7 @@ const TopBar = () => {
               edge="start"
               color="inherit"
               sx={{ mr: 1 }}
-              onClick={() => navigate("/app")}
+              onClick={() => navigate("/app/projects")}
             >
               <HomeIcon />
             </IconButton>

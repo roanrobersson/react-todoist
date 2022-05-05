@@ -12,8 +12,9 @@ import { Add as AddIcon } from "@mui/icons-material";
 import {
   CLOSE_TASK,
   ADD_TASK,
-  REOPEN_TASK,
+  UPDATE_TASK,
   DELETE_TASK,
+  REOPEN_TASK,
 } from "@/state/slices/tasksSlice";
 
 const ProjectViewer = () => {
@@ -36,6 +37,10 @@ const ProjectViewer = () => {
   );
   const lastClosedTaskId = useSelector((state) => state.tasks.lastClosedTaskId);
 
+  const findTaskById = (taskId) => {
+    return tasks.find((task) => task.id == taskId);
+  };
+
   useEffect(() => {
     if (lastClosedTaskId != null) {
       setIsSnackBarOpen(true);
@@ -50,9 +55,14 @@ const ProjectViewer = () => {
     dispatch(CLOSE_TASK(taskId));
   };
 
-  const handleTaskClick = (taskId) => {};
+  const handleTaskClick = (taskId) => {
+    //
+  };
 
-  const handleTaskEditClick = (taskId) => {};
+  const handleTaskEditClick = (taskId) => {
+    setTaskEditorType("edit");
+    setTaskEditorInitialData(findTaskById(taskId));
+  };
 
   const handleTaskOptionsClick = (event, taskId) => {
     setTaskOptionsMenuAnchorEl(event.currentTarget);
@@ -71,7 +81,7 @@ const ProjectViewer = () => {
     setTaskOptionsMenuAnchorEl(null);
   };
 
-  const handleTaskMenuEditClick = (taskId) => {
+  const handleTaskMenuClipboardClick = (taskId) => {
     //
   };
 
@@ -92,8 +102,9 @@ const ProjectViewer = () => {
       task.project_id = selectedProjectId;
       dispatch(ADD_TASK(task));
     }
-    //else dispatch(UPDATE_TASK(task));
+    else dispatch(UPDATE_TASK(task));
     setTaskEditorType(null);
+    setTaskEditorInitialData(findTaskById(null));
   };
 
   if (!selectedProject) return null;
@@ -108,19 +119,31 @@ const ProjectViewer = () => {
         <TaskList>
           {tasks
             .sort((a, b) => a.order > b.order)
-            .map((task) => (
-              <TaskListItem
-                key={task.id}
-                task={task}
-                onCheckToggle={handleTaskCheckToggle}
-                onClick={handleTaskClick}
-                onEditClick={handleTaskEditClick}
-                onOptionsClick={handleTaskOptionsClick}
-              />
-            ))}
+            .map((task) => {
+              return taskEditorType === "edit" &&
+                task.id === taskEditorInitialData?.id ? (
+                <TaskEditor
+                  key={task.id}
+                  initialData={taskEditorInitialData}
+                  cancelButtonText="Cancelar"
+                  confirmButtonText="Salvar"
+                  onCancel={handleTaskEditorCancel}
+                  onSubmit={handleTaskEditorSubmit}
+                />
+              ) : (
+                <TaskListItem
+                  key={task.id}
+                  task={task}
+                  onCheckToggle={handleTaskCheckToggle}
+                  onClick={handleTaskClick}
+                  onEditClick={handleTaskEditClick}
+                  onOptionsClick={handleTaskOptionsClick}
+                />
+              );
+            })}
         </TaskList>
 
-        {taskEditorType ? (
+        {taskEditorType === "add" ? (
           <TaskEditor
             initialData={taskEditorInitialData}
             cancelButtonText="Cancelar"
@@ -143,8 +166,8 @@ const ProjectViewer = () => {
           anchorEl={taskOptionsMenuAnchorEl}
           taskId={taskOptionsMenuTaskId}
           onClose={handleTaskMenuClose}
-          onEditClick={handleTaskMenuEditClick}
           onDeleteClick={handleTaskMenuDeleteClick}
+          onCopyToClipboardClick={handleTaskMenuClipboardClick}
         />
 
         {!selectedProject && (

@@ -27,11 +27,13 @@ import {
 import {
   FETCH_TASKS,
   ADD_TASK,
+  UPDATE_TASK,
   DELETE_TASK,
   CLOSE_TASK,
   REOPEN_TASK,
   onRequestTasks,
   onAddTask,
+  onUpdateTask,
   onDeleteTask,
   onCloseTasks,
   onReopenTask,
@@ -50,9 +52,10 @@ export default function* rootSaga() {
     takeLatest(UPDATE_PROJECT.type, onUpdateProject),
     takeLatest(DELETE_PROJECT.type, onDeleteProject),
     takeLatest(DELETE_PROJECT_SUCCESS.type, onDeleteProjectSuccess),
-    
+
     takeLatest(FETCH_TASKS.type, onRequestTasks),
     takeLatest(ADD_TASK.type, onAddTask),
+    takeLatest(UPDATE_TASK.type, onUpdateTask),
     takeLatest(DELETE_TASK.type, onDeleteTask),
     takeEvery(CLOSE_TASK.type, onCloseTasks),
     takeLatest(REOPEN_TASK.type, onReopenTask),

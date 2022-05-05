@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TaskOptionsMenu from "@/components/TaskOptionsMenu";
 import {
   MoreHoriz as MoreHorizIcon,
   BorderColorOutlined as BorderColorIcon,
@@ -12,6 +11,7 @@ import {
   ListItemButton,
   ListItemText,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 const TaskListItem = ({
@@ -24,30 +24,30 @@ const TaskListItem = ({
   const [checked, setChecked] = useState([0]);
   const [hoveredTaskId, setHoveredTaskId] = useState(null);
 
-  const handleCheckToggle = (taskId) => {
-    const currentIndex = checked.indexOf(taskId);
+  const handleCheckToggle = () => {
+    const currentIndex = checked.indexOf(task.id);
     const newChecked = [...checked];
     if (currentIndex === -1) {
-      newChecked.push(taskId);
+      newChecked.push(task.id);
     } else {
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
 
-    onCheckToggle(taskId);
+    onCheckToggle(task.id);
   };
 
-  const handleClick = (taskId) => {
-    onClick(taskId);
+  const handleClick = () => {
+    onClick(task.id);
   };
 
-  const handleEditClick = (taskId) => {
-    onEditClick(taskId);
+  const handleEditClick = () => {
+    onEditClick(task.id);
   };
 
-  const handleOptionsClick = (event, taskId) => {
+  const handleOptionsClick = (event) => {
     event.stopPropagation();
-    onOptionsClick(event, taskId);
+    onOptionsClick(event, task.id);
   };
 
   return (
@@ -66,22 +66,23 @@ const TaskListItem = ({
               }),
             }}
           >
-            <IconButton edge="end" sx={{ mr: 1 }} onClick={handleEditClick}>
-              <BorderColorIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              onClick={(event) => handleOptionsClick(event, task.id)}
-            >
-              <MoreHorizIcon />
-            </IconButton>
+            <Tooltip title="Editar tarefa">
+              <IconButton edge="end" sx={{ mr: 1 }} onClick={handleEditClick}>
+                <BorderColorIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Mais opções da tarefa">
+              <IconButton edge="end" onClick={handleOptionsClick}>
+                <MoreHorizIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         }
       >
         <Checkbox
           edge="start"
           checked={checked.indexOf(task.id) !== -1}
-          onClick={() => handleCheckToggle(task.id)}
+          onClick={handleCheckToggle}
           disableRipple
         />
         <ListItemButton
@@ -93,7 +94,11 @@ const TaskListItem = ({
             },
           }}
         >
-          <ListItemText primary={task.content} secondary={task.description} sx={{pr: 7}}/>
+          <ListItemText
+            primary={task.content}
+            secondary={task.description}
+            sx={{ pr: 7 }}
+          />
         </ListItemButton>
       </ListItem>
       <Divider />

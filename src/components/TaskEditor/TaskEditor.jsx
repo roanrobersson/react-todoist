@@ -38,6 +38,7 @@ const TaskEditor = ({
           border: "1px solid LightGray",
           borderRadius: 3,
           p: "10px",
+          mt: 1,
         }}
       >
         <TextField

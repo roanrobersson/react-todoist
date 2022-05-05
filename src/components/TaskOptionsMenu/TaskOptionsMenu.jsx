@@ -10,12 +10,12 @@ const TaskOptionsMenu = ({
   anchorEl,
   taskId,
   onClose,
-  onEditClick,
   onDeleteClick,
+  onCopyToClipboardClick,
 }) => {
-  const handleEditClick = (taskId) => {
+  const handleCopyToClipboardClick = (taskId) => {
     onClose();
-    onEditClick(taskId);
+    onCopyToClipboardClick(taskId);
   };
 
   const handleDeleteClick = (taskId) => {
@@ -30,7 +30,7 @@ const TaskOptionsMenu = ({
       onClose={onClose}
       sx={{ color: "gray" }}
     >
-      <MenuItem onClick={() => handleEditClick(taskId)}>
+      <MenuItem onClick={() => handleCopyToClipboardClick(taskId)}>
         <ListItemIcon>
           <LinkIcon fontSize="small" />
         </ListItemIcon>
