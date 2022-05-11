@@ -91,6 +91,7 @@ const ProjectViewer = () => {
 
   const handleAddTaskClick = () => {
     setTaskEditorType("add");
+    setTaskEditorInitialData(null);
   };
 
   const handleTaskEditorCancel = () => {
