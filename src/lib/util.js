@@ -21,18 +21,18 @@ export const clearAllParamsFromActualURL = () => {
   window.history.replaceState(null, null, window.location.pathname);
 };
 
-export const getColorHexByColorNumber = (colorNumber = 47) => {
-  return colors[colorNumber].code;
+export const getColorHexByKey = (key = "grey") => {
+  return colors[key].code;
 };
 
-export const getColorNameByColorNumber = (colorNumber = 47) => {
-  return colors[colorNumber].name;
+export const getColorNameByKey = (key = "grey") => {
+  return colors[key].name;
 };
 
 export const getColorsAsObjects = () => {
   return Object.keys(colors).map((key) => {
     const colorObj = colors[key];
-    return { number: key, name: colorObj.name, code: colorObj.code };
+    return { key: key, name: colorObj.name, code: colorObj.code };
   });
 };
 

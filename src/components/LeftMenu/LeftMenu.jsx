@@ -3,7 +3,7 @@ import { LeftMenuContext } from "@/providers/LeftMenuProvider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { styled } from "@mui/material/styles";
 import { LEFT_MENU_WIDTH } from "../../configs/layout.js";
-import { getColorHexByColorNumber } from "@/lib/util.js";
+import { getColorHexByKey } from "@/lib/util.js";
 import { useParams } from "react-router-dom";
 import {
   Inbox as InboxIcon,
@@ -187,7 +187,7 @@ const LeftMenu = ({
                   <ListItemIcon>
                     <CircleIcon
                       fontSize="small"
-                      htmlColor={getColorHexByColorNumber(project.color)}
+                      htmlColor={getColorHexByKey(project.color)}
                     />
                   </ListItemIcon>
 

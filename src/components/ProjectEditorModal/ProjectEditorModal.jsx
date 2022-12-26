@@ -99,7 +99,7 @@ const ProjectEditorModal = ({
                 sx={{ "& .MuiSelect-select": { display: "flex" } }}
               >
                 {getColorsAsObjects().map((color) => (
-                  <MenuItem value={color.number} key={color.number}>
+                  <MenuItem value={color.key} key={color.key}>
                     <CircleIcon fontSize="small" htmlColor={color.code} />
                     <Typography sx={{ ml: 1 }}>{color.name}</Typography>
                   </MenuItem>
